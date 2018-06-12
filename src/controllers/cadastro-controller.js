@@ -3,7 +3,9 @@
 
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/cadastro-repository');
-
+const md5 = require('md5');
+const emailService = require('../services/email-service');
+const authService = require('../services/auth-service');
 
 exports.get = async (req, res, next) => {
     try {
@@ -51,7 +53,19 @@ exports.post = async (req, res, next) => {
     }
 
     try {
-        await repository.create(req.body);
+        await repository.create({
+
+            name: req.body.name,
+            email: req.body.email,
+            password: md5(req.body.password + global.SALT_KEY)
+        });
+
+
+
+        emailService.send(
+            req.body.email,
+            'Bem vindo ao ifinancia',
+            global.EMAIL_TMPL.replace('{0}', req.body.name));
 
         res.status(201).send({ message: 'Cliente cadastrado com sucesso' });
 
@@ -75,5 +89,41 @@ exports.put = async (req, res, next) => {
         });
     }
 };
+
+
+exports.authenticate = async(req, res, next) => {
+    try {
+        const cadastro = await repository.authenticate({
+            email: req.body.email,
+            password: md5(req.body.password + global.SALT_KEY)
+        });
+
+        if (!cadastro) {
+            res.status(404).send({
+                message: 'Usuário ou senha inválidos'
+            });
+            return;
+        }
+
+        const token = await authService.generateToken({
+        
+            email: cadastro.email,
+            name: cadastro.name,
+        });
+
+        res.status(201).send({
+            token: token,
+            data: {
+                email: cadastro.email,
+                name: cadastro.name
+            }
+        });
+    } catch (e) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
+        });
+    }
+};
+
 
 

@@ -12,6 +12,23 @@ exports.get = async ()=>{
     return res;
 }
 
+exports.authenticate = async (data)=>{
+    const res = await Cadastro
+    .findOne({
+        email:data.email,
+        password:data.password
+    });
+    return res;
+}
+
+
+exports.get = async ()=>{
+    const res = await Cadastro
+    .find({
+        active:true
+    }, 'name');
+    return res;
+}
 exports.getById = async (id) => {
     const res =await Cadastro
         .findById(id)
