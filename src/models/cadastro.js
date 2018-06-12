@@ -17,13 +17,7 @@ const schema = new Schema({
     password: {
         type: String,
         required: true
-    },
-
-    sexo:{
-        type: String,
-        required: true
     }
-
 
 });
 

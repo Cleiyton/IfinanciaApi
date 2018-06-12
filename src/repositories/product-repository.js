@@ -55,8 +55,6 @@ exports.update = async (id, data) => {
                 slug: data.slug
             }
         })
-
-
 }
 
 exports.delete = async (id) => {
