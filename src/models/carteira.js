@@ -16,6 +16,12 @@ const schema = new Schema({
     saldo: {
         type: Number,
         required: true
+    },
+
+    active:{
+        type:Boolean,
+        required:true,
+        default:true
     }
 });
 

@@ -5,6 +5,20 @@ const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/cadastro-repository');
 
 
+exports.get = async (req, res, next) => {
+    try {
+        const data = await repository.get();
+        res.status(200).send(data);
+
+    } catch (e) {
+
+        res.status(500).send({
+            message: 'Falha ao processar suas requisições'
+        });
+
+    }
+
+}
 
 exports.getById = async (req, res, next) => {
     try {
@@ -52,7 +66,7 @@ exports.post = async (req, res, next) => {
 exports.put = async (req, res, next) => {
     try {
         await repository.update(req.params.id, req.body)
-        res.status(200).send({ message: 'Cadastro atualizado com sucesso!' });
+        res.status(200).send({ message: 'Usuario atualizado com sucesso!' });
 
     } catch (e) {
 

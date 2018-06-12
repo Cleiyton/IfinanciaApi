@@ -4,6 +4,14 @@ const mongoose = require('mongoose');
 const Cadastro = mongoose.model('Cadastro');
 
 
+exports.get = async ()=>{
+    const res = await Cadastro
+    .find({
+        active:true
+    }, 'name');
+    return res;
+}
+
 exports.getById = async (id) => {
     const res =await Cadastro
         .findById(id)
@@ -34,6 +42,6 @@ exports.update = async (id, data) => {
 
 exports.delete = async (id) => {
     await Cadastro
-        .findByIdAndRemove(id)
+        .findByIdAndRemove(id);
 
 }
