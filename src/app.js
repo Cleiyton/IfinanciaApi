@@ -28,6 +28,12 @@ const carteiraRoute = require('./routes/carteira-route');
 
 
 app.use(bodyParse.json());
+app.use((req,res,next) =>{
+    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Headers",
+               "Origin, X-Requested-With, Content-Type, Accept")
+
+})
 app.use(bodyParse.urlencoded({
     extended: false
 }));
